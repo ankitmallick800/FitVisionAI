@@ -32,10 +32,13 @@ async function createDetector(): Promise<PoseDetector> {
   }
   const { PoseLandmarker, FilesetResolver } = await import("@mediapipe/tasks-vision");
   const origin = window.location.origin;
+  // MediaPipe appends "/vision_wasm_internal.js". A trailing slash becomes a double
+  // slash: jsDelivr returns 400 and the script never runs.
+  const wasmBase = (url: string) => url.replace(/\/+$/, "");
   const attempts = [
-    { wasm: `${origin}/mediapipe/`, model: `${origin}/models/pose_landmarker_lite.task` },
+    { wasm: wasmBase(`${origin}/mediapipe`), model: `${origin}/models/pose_landmarker_lite.task` },
     {
-      wasm: "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm/",
+      wasm: wasmBase("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm"),
       model: "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
     },
   ];

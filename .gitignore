@@ -4,6 +4,3 @@ dist
 *.local
 .env
 .env.*
-public/models/*.task
-public/mediapipe/*.wasm
-public/mediapipe/*.js
